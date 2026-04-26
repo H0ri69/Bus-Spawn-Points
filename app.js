@@ -151,8 +151,12 @@
       updateStepperUI();
     });
     
-    hrInput.addEventListener("focus", () => { hrInput.select(); });
-    minInput.addEventListener("focus", () => { minInput.select(); });
+    hrInput.addEventListener("focus", () => { hrInput.value = ""; });
+    minInput.addEventListener("focus", () => { minInput.value = ""; });
+    
+    // Also handle blur in case they don't change anything and just tap away
+    hrInput.addEventListener("blur", updateStepperUI);
+    minInput.addEventListener("blur", updateStepperUI);
   }
 
   // === SET TIME ===
