@@ -313,14 +313,14 @@ body {
   padding: 8px 16px; flex: 1;
 }
 .stepper-col {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
 }
 .stepper-btn {
   background: transparent; border: none;
   color: var(--text-secondary);
-  cursor: pointer; padding: 4px 16px;
+  cursor: pointer; padding: 12px 24px;
   display: flex; align-items: center; justify-content: center;
-  border-radius: 6px; transition: all 0.2s;
+  border-radius: 8px; transition: all 0.2s;
 }
 .stepper-btn:active {
   background: rgba(167,139,250,0.15); color: var(--accent);
@@ -329,21 +329,6 @@ body {
   font-size: 28px; font-weight: 700;
   color: var(--text-primary); font-variant-numeric: tabular-nums;
   width: 50px; text-align: center;
-  background: transparent; border: none; outline: none;
-  padding: 0; margin: 0; font-family: inherit;
-  -moz-appearance: textfield;
-  appearance: textfield;
-  -webkit-user-select: text;
-  user-select: text;
-}
-.stepper-val::-webkit-outer-spin-button,
-.stepper-val::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  appearance: none;
-  margin: 0;
-}
-.stepper-val:focus {
-  color: var(--accent);
 }
 .stepper-colon {
   font-size: 24px; font-weight: 700; color: var(--text-secondary);
