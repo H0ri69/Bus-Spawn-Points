@@ -326,6 +326,7 @@
 
   // === NAVIGATION ===
   function showPage(pageId) {
+    window.scrollTo(0, 0);
     $$(".page").forEach(p => p.classList.remove("active"));
     $(`#${pageId}`).classList.add("active");
     $$(".nav-item").forEach(n => {
