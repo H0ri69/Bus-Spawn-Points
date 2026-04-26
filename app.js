@@ -36,7 +36,7 @@
     setInterval(updateLiveTime, 1000);
     updateDayIndicator();
     populateStops();
-    initDrumPickers();
+    initStepper();
     setTimeToNow();
     renderNextUp();
     setInterval(renderNextUp, 30000);
@@ -85,108 +85,51 @@
     toStop.value = stops[stops.length - 1];
   }
 
-  // === DRUM PICKER ===
-  const ITEM_H = 36;
-  const PICKER_H = 140;
-  // Offset so item 0's center aligns with the picker's vertical center
-  const CENTER_OFFSET = (PICKER_H - ITEM_H) / 2; // = 52
-  let hourDrum, minuteDrum;
+  // === TIME STEPPER ===
+  function initStepper() {
+    const hrPlus = $("#hrPlus");
+    const hrMinus = $("#hrMinus");
+    const minPlus = $("#minPlus");
+    const minMinus = $("#minMinus");
 
-  function initDrumPickers() {
-    hourDrum = createDrum("hourTrack", "hourPicker", 24, (v) => { selectedHour = v; onDrumChange(); });
-    minuteDrum = createDrum("minuteTrack", "minutePicker", 60, (v) => { selectedMinute = v; onDrumChange(); });
-  }
-
-  function onDrumChange() {
-    useNow = false;
-    nowBtn.classList.remove("active");
-  }
-
-  function createDrum(trackId, pickerId, count, onChange) {
-    const track = $("#" + trackId);
-    const picker = $("#" + pickerId);
-    track.innerHTML = "";
-
-    for (let i = 0; i < count; i++) {
-      const el = document.createElement("div");
-      el.className = "drum-item";
-      el.textContent = i.toString().padStart(2, "0");
-      el.dataset.value = i;
-      track.appendChild(el);
+    function updateStepperUI() {
+      $("#hrVal").textContent = selectedHour.toString().padStart(2, "0");
+      $("#minVal").textContent = selectedMinute.toString().padStart(2, "0");
+      useNow = false;
+      nowBtn.classList.remove("active");
     }
 
-    const state = { index: 0, startY: 0, baseOffset: 0, dragging: false };
-
-    function getOffset(idx) {
-      return CENTER_OFFSET - idx * ITEM_H;
+    let intervalId;
+    function startStep(action) {
+      action();
+      updateStepperUI();
+      intervalId = setInterval(() => {
+        action();
+        updateStepperUI();
+      }, 150);
+    }
+    function stopStep() {
+      clearInterval(intervalId);
     }
 
-    function snapTo(idx, animate) {
-      idx = ((idx % count) + count) % count; // wrap around
-      state.index = idx;
-      const off = getOffset(idx);
-      track.style.transition = animate ? "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)" : "none";
-      track.style.transform = `translateY(${off}px)`;
-      track.querySelectorAll(".drum-item").forEach((el, i) => {
-        el.classList.toggle("selected", i === idx);
-      });
-      onChange(idx);
+    function addHr() { selectedHour = (selectedHour + 1) % 24; }
+    function subHr() { selectedHour = (selectedHour - 1 + 24) % 24; }
+    function addMin() { selectedMinute = (selectedMinute + 1) % 60; }
+    function subMin() { selectedMinute = (selectedMinute - 1 + 60) % 60; }
+
+    // Bind touch/mouse events for continuous holding
+    function bindStepper(btn, action) {
+      btn.addEventListener("touchstart", (e) => { e.preventDefault(); startStep(action); }, { passive: false });
+      btn.addEventListener("touchend", stopStep);
+      btn.addEventListener("mousedown", () => startStep(action));
+      btn.addEventListener("mouseup", stopStep);
+      btn.addEventListener("mouseleave", stopStep);
     }
 
-    function onStart(y) {
-      state.dragging = true;
-      state.startY = y;
-      state.baseOffset = getOffset(state.index);
-      track.style.transition = "none";
-    }
-
-    function onMove(y) {
-      if (!state.dragging) return;
-      const off = state.baseOffset + (y - state.startY);
-      track.style.transform = `translateY(${off}px)`;
-    }
-
-    function onEnd(y) {
-      if (!state.dragging) return;
-      state.dragging = false;
-      const off = state.baseOffset + (y - state.startY);
-      const idx = Math.round((CENTER_OFFSET - off) / ITEM_H);
-      snapTo(idx, true);
-    }
-
-    // Touch
-    picker.addEventListener("touchstart", (e) => {
-      onStart(e.touches[0].clientY);
-    }, { passive: true });
-    
-    picker.addEventListener("touchmove", (e) => {
-      e.preventDefault(); // Stop page scrolling
-      onMove(e.touches[0].clientY);
-    }, { passive: false });
-    
-    picker.addEventListener("touchend", (e) => {
-      onEnd(e.changedTouches[0].clientY);
-    });
-
-    // Mouse
-    picker.addEventListener("mousedown", (e) => { onStart(e.clientY); e.preventDefault(); });
-    document.addEventListener("mousemove", (e) => { if (state.dragging) onMove(e.clientY); });
-    document.addEventListener("mouseup", (e) => { if (state.dragging) onEnd(e.clientY); });
-
-    // Wheel
-    picker.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      snapTo(state.index + (e.deltaY > 0 ? 1 : -1), true);
-    }, { passive: false });
-
-    // Tap on item to select it
-    track.querySelectorAll(".drum-item").forEach((el) => {
-      el.addEventListener("click", () => {
-        snapTo(parseInt(el.dataset.value, 10), true);
-      });
-    });
-
-    return { snapTo };
+    bindStepper(hrPlus, addHr);
+    bindStepper(hrMinus, subHr);
+    bindStepper(minPlus, addMin);
+    bindStepper(minMinus, subMin);
   }
 
   // === SET TIME ===
@@ -194,8 +137,8 @@
     const now = new Date();
     selectedHour = now.getHours();
     selectedMinute = now.getMinutes();
-    if (hourDrum) hourDrum.snapTo(selectedHour, false);
-    if (minuteDrum) minuteDrum.snapTo(selectedMinute, false);
+    $("#hrVal").textContent = selectedHour.toString().padStart(2, "0");
+    $("#minVal").textContent = selectedMinute.toString().padStart(2, "0");
     useNow = true;
     nowBtn.classList.add("active");
   }

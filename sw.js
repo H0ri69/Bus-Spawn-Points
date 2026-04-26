@@ -1,4 +1,4 @@
-const CACHE_NAME = "bus-spawn-points-v2";
+const CACHE_NAME = "bus-spawn-points-v3";
 const ASSETS = [
   "./",
   "./index.html",

@@ -69,15 +69,17 @@
     <div class="control-group">
       <label>Departure after</label>
       <div class="time-picker-row">
-        <div class="drum-picker-container">
-          <div class="drum-picker" id="hourPicker" data-type="hour">
-            <div class="drum-track" id="hourTrack"></div>
-            <div class="drum-highlight"></div>
+        <div class="time-stepper">
+          <div class="stepper-col">
+            <button class="stepper-btn" id="hrPlus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></button>
+            <div class="stepper-val" id="hrVal">12</div>
+            <button class="stepper-btn" id="hrMinus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
           </div>
-          <span class="drum-colon">:</span>
-          <div class="drum-picker" id="minutePicker" data-type="minute">
-            <div class="drum-track" id="minuteTrack"></div>
-            <div class="drum-highlight"></div>
+          <span class="stepper-colon">:</span>
+          <div class="stepper-col">
+            <button class="stepper-btn" id="minPlus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></button>
+            <div class="stepper-val" id="minVal">30</div>
+            <button class="stepper-btn" id="minMinus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
           </div>
         </div>
         <button class="now-btn active" id="nowBtn">Now</button>

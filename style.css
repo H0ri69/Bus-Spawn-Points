@@ -301,55 +301,38 @@ body {
   box-shadow: 0 2px 10px rgba(167,139,250,0.25);
 }
 
-/* === Drum Picker === */
+/* === Time Stepper === */
 .time-picker-row {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
 }
-.drum-picker-container {
-  display: flex; align-items: center; gap: 0;
-  flex: 1;
+.time-stepper {
+  display: flex; align-items: center; justify-content: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 8px 16px; flex: 1;
 }
-.drum-colon {
-  font-size: 28px; font-weight: 700;
+.stepper-col {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.stepper-btn {
+  background: transparent; border: none;
   color: var(--text-secondary);
-  padding: 0 2px; user-select: none;
+  cursor: pointer; padding: 4px 16px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px; transition: all 0.2s;
 }
-.drum-picker {
-  position: relative;
-  height: 140px; flex: 1;
-  overflow: hidden;
-  touch-action: none;
-  -webkit-mask-image: linear-gradient(to bottom,
-    transparent 0%, rgba(0,0,0,0.3) 20%, black 40%, black 60%, rgba(0,0,0,0.3) 80%, transparent 100%);
-  mask-image: linear-gradient(to bottom,
-    transparent 0%, rgba(0,0,0,0.3) 20%, black 40%, black 60%, rgba(0,0,0,0.3) 80%, transparent 100%);
+.stepper-btn:active {
+  background: rgba(167,139,250,0.15); color: var(--accent);
 }
-.drum-track {
-  display: flex; flex-direction: column; align-items: center;
-  transition: transform 0.15s cubic-bezier(0.2, 0, 0.2, 1);
-  cursor: grab;
-  touch-action: none;
+.stepper-val {
+  font-size: 28px; font-weight: 700;
+  color: var(--text-primary); font-variant-numeric: tabular-nums;
+  width: 44px; text-align: center;
 }
-.drum-track:active { cursor: grabbing; }
-.drum-item {
-  height: 36px; display: flex; align-items: center; justify-content: center;
-  font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums;
-  color: var(--text-tertiary);
-  user-select: none; flex-shrink: 0;
-  transition: color 0.15s, transform 0.15s;
-  touch-action: none;
-}
-.drum-item.selected {
-  color: var(--text-primary);
-  font-size: 26px; font-weight: 700;
-}
-.drum-highlight {
-  position: absolute; top: 50%; left: 4px; right: 4px;
-  height: 36px; transform: translateY(-50%);
-  background: rgba(167,139,250,0.08);
-  border: 1px solid rgba(167,139,250,0.15);
-  border-radius: 8px;
-  pointer-events: none;
+.stepper-colon {
+  font-size: 24px; font-weight: 700; color: var(--text-secondary);
+  margin: 0 12px; margin-bottom: 2px;
 }
 .now-btn {
   padding: 10px 16px;
