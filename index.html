@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="description" content="BL1 company bus timetable – search departures between Brno Úzká and Blučina.">
+  <title>Bus Spawn Points</title>
+
+  <!-- PWA & iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Bus SP">
+  <meta name="theme-color" content="#0a0e27">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<!-- ===== HEADER ===== -->
+<header class="app-header">
+  <div class="logo-row">
+    <span class="line-badge">BL1</span>
+    <h1>Bus Spawn Points</h1>
+  </div>
+  <div class="live-time" id="liveTime"></div>
+</header>
+
+<!-- ===== SEARCH PAGE ===== -->
+<section class="page active" id="pageSearch">
+  <!-- Direction Toggle -->
+  <div class="direction-toggle" id="dirToggle">
+    <button class="active" data-dir="toBlucina">Brno → Blučina</button>
+    <button data-dir="toBrno">Blučina → Brno</button>
+  </div>
+
+  <!-- Day indicator -->
+  <div class="day-indicator" id="dayIndicator">
+    <span class="dot"></span>
+    <span id="dayLabel">Weekday</span>
+  </div>
+
+  <!-- Controls -->
+  <div class="search-controls glass" style="padding:16px;">
+    <div class="control-group">
+      <label for="fromStop">From</label>
+      <div class="stop-selector">
+        <select id="fromStop"></select>
+      </div>
+    </div>
+    <div class="control-group">
+      <label for="toStop">To</label>
+      <div class="stop-selector">
+        <select id="toStop"></select>
+      </div>
+    </div>
+    <div class="control-group">
+      <label>Day</label>
+      <div class="day-selector">
+        <button class="day-opt active" data-day="today" id="dayToday">Today</button>
+        <button class="day-opt" data-day="weekday" id="dayWeekday">Mon–Fri</button>
+        <button class="day-opt" data-day="weekend" id="dayWeekend">Sat–Sun</button>
+      </div>
+    </div>
+    <div class="control-group">
+      <label>Departure after</label>
+      <div class="time-picker-row">
+        <div class="drum-picker-container">
+          <div class="drum-picker" id="hourPicker" data-type="hour">
+            <div class="drum-track" id="hourTrack"></div>
+            <div class="drum-highlight"></div>
+          </div>
+          <span class="drum-colon">:</span>
+          <div class="drum-picker" id="minutePicker" data-type="minute">
+            <div class="drum-track" id="minuteTrack"></div>
+            <div class="drum-highlight"></div>
+          </div>
+        </div>
+        <button class="now-btn active" id="nowBtn">Now</button>
+      </div>
+    </div>
+    <button class="search-btn" id="searchBtn">Search Connections</button>
+  </div>
+
+  <div class="section-title">Next departure</div>
+  <div id="nextUpCard"></div>
+
+</section>
+
+<!-- ===== RESULTS PAGE ===== -->
+<section class="page" id="pageResults">
+  <div class="results-header">
+    <h2 id="resultsTitle">Results</h2>
+    <span class="results-count" id="resultsCount"></span>
+  </div>
+  <div id="resultsList"></div>
+</section>
+
+<!-- ===== TIMETABLE PAGE ===== -->
+<section class="page" id="pageTimetable">
+  <div class="direction-toggle" id="ttDirToggle">
+    <button class="active" data-dir="toBlucina">Brno → Blučina</button>
+    <button data-dir="toBrno">Blučina → Brno</button>
+  </div>
+
+  <div class="direction-toggle" id="ttDayToggle" style="margin-top:0;">
+    <button class="active" data-day="weekday">Mon–Fri</button>
+    <button data-day="weekend">Sat–Sun</button>
+  </div>
+
+  <div class="timetable-scroll">
+    <table class="timetable-table" id="timetableTable">
+      <thead id="ttHead"></thead>
+      <tbody id="ttBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== INFO PAGE ===== -->
+<section class="page" id="pageInfo">
+  <div class="info-card glass">
+    <h3>🚌 Route BL1</h3>
+    <div class="route-map" id="routeMapToBlucina">
+      <div class="route-map-stop">
+        <div class="route-map-marker"><div class="circle"></div><div class="line"></div></div>
+        <div class="route-map-info">
+          <h4>Brno Úzká</h4>
+          <div class="travel-time">5 min →</div>
+        </div>
+      </div>
+      <div class="route-map-stop">
+        <div class="route-map-marker"><div class="circle"></div><div class="line"></div></div>
+        <div class="route-map-info">
+          <h4>Brno Komárov</h4>
+          <div class="travel-time">20 min →</div>
+        </div>
+      </div>
+      <div class="route-map-stop">
+        <div class="route-map-marker"><div class="circle"></div></div>
+        <div class="route-map-info">
+          <h4>Blučina</h4>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:12px;font-size:13px;color:var(--text-tertiary);">
+      Return route: Blučina → Brno Mariánské nám. → Brno Úzká (25 min total)
+    </p>
+  </div>
+
+  <div class="info-card glass">
+    <h3>📅 Operating Info</h3>
+    <ul>
+      <li>Weekday: Monday – Friday (16 departures/direction)</li>
+      <li>Weekend: Saturday – Sunday (7 departures/direction)</li>
+      <li style="color:var(--yellow-accent);">⬤ Yellow services run only on working Saturdays & Sundays</li>
+    </ul>
+  </div>
+
+  <div class="info-card glass">
+    <h3>📲 Add to Home Screen</h3>
+    <ol class="install-steps">
+      <li>Open this page in Safari on your iPhone</li>
+      <li>Tap the Share button (square with arrow)</li>
+      <li>Scroll down and tap "Add to Home Screen"</li>
+      <li>Tap "Add" — done! The app works offline</li>
+    </ol>
+  </div>
+
+  <div class="version-info">
+    Bus Spawn Points v1.0<br>BL1 Company Bus
+  </div>
+</section>
+
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="bottom-nav">
+  <button class="nav-item active" data-page="pageSearch" id="navSearch">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+    </svg>
+    <span>Search</span>
+  </button>
+  <button class="nav-item" data-page="pageTimetable" id="navTimetable">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>
+    </svg>
+    <span>Timetable</span>
+  </button>
+  <button class="nav-item" data-page="pageInfo" id="navInfo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+    </svg>
+    <span>Info</span>
+  </button>
+</nav>
+
+<script src="timetable-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
