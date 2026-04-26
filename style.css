@@ -318,6 +318,7 @@ body {
   position: relative;
   height: 140px; flex: 1;
   overflow: hidden;
+  touch-action: none;
   -webkit-mask-image: linear-gradient(to bottom,
     transparent 0%, rgba(0,0,0,0.3) 20%, black 40%, black 60%, rgba(0,0,0,0.3) 80%, transparent 100%);
   mask-image: linear-gradient(to bottom,

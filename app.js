@@ -155,9 +155,18 @@
     }
 
     // Touch
-    picker.addEventListener("touchstart", (e) => onStart(e.touches[0].clientY), { passive: true });
-    picker.addEventListener("touchmove", (e) => onMove(e.touches[0].clientY), { passive: true });
-    picker.addEventListener("touchend", (e) => onEnd(e.changedTouches[0].clientY));
+    picker.addEventListener("touchstart", (e) => {
+      onStart(e.touches[0].clientY);
+    }, { passive: true });
+    
+    picker.addEventListener("touchmove", (e) => {
+      e.preventDefault(); // Stop page scrolling
+      onMove(e.touches[0].clientY);
+    }, { passive: false });
+    
+    picker.addEventListener("touchend", (e) => {
+      onEnd(e.changedTouches[0].clientY);
+    });
 
     // Mouse
     picker.addEventListener("mousedown", (e) => { onStart(e.clientY); e.preventDefault(); });
