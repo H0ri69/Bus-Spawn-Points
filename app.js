@@ -93,8 +93,8 @@
     const minMinus = $("#minMinus");
 
     function updateStepperUI() {
-      $("#hrVal").textContent = selectedHour.toString().padStart(2, "0");
-      $("#minVal").textContent = selectedMinute.toString().padStart(2, "0");
+      $("#hrVal").value = selectedHour.toString().padStart(2, "0");
+      $("#minVal").value = selectedMinute.toString().padStart(2, "0");
       useNow = false;
       nowBtn.classList.remove("active");
     }
@@ -130,6 +130,29 @@
     bindStepper(hrMinus, subHr);
     bindStepper(minPlus, addMin);
     bindStepper(minMinus, subMin);
+
+    // Keyboard input handling
+    const hrInput = $("#hrVal");
+    const minInput = $("#minVal");
+
+    hrInput.addEventListener("change", () => {
+      let val = parseInt(hrInput.value, 10);
+      if (isNaN(val)) val = selectedHour;
+      val = Math.max(0, Math.min(23, val));
+      selectedHour = val;
+      updateStepperUI();
+    });
+
+    minInput.addEventListener("change", () => {
+      let val = parseInt(minInput.value, 10);
+      if (isNaN(val)) val = selectedMinute;
+      val = Math.max(0, Math.min(59, val));
+      selectedMinute = val;
+      updateStepperUI();
+    });
+    
+    hrInput.addEventListener("focus", () => { hrInput.select(); });
+    minInput.addEventListener("focus", () => { minInput.select(); });
   }
 
   // === SET TIME ===
@@ -137,8 +160,8 @@
     const now = new Date();
     selectedHour = now.getHours();
     selectedMinute = now.getMinutes();
-    $("#hrVal").textContent = selectedHour.toString().padStart(2, "0");
-    $("#minVal").textContent = selectedMinute.toString().padStart(2, "0");
+    $("#hrVal").value = selectedHour.toString().padStart(2, "0");
+    $("#minVal").value = selectedMinute.toString().padStart(2, "0");
     useNow = true;
     nowBtn.classList.add("active");
   }

@@ -328,7 +328,18 @@ body {
 .stepper-val {
   font-size: 28px; font-weight: 700;
   color: var(--text-primary); font-variant-numeric: tabular-nums;
-  width: 44px; text-align: center;
+  width: 50px; text-align: center;
+  background: transparent; border: none; outline: none;
+  padding: 0; margin: 0; font-family: inherit;
+  -moz-appearance: textfield;
+}
+.stepper-val::-webkit-outer-spin-button,
+.stepper-val::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.stepper-val:focus {
+  color: var(--accent);
 }
 .stepper-colon {
   font-size: 24px; font-weight: 700; color: var(--text-secondary);

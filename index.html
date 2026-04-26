@@ -72,13 +72,13 @@
         <div class="time-stepper">
           <div class="stepper-col">
             <button class="stepper-btn" id="hrPlus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></button>
-            <div class="stepper-val" id="hrVal">12</div>
+            <input type="number" class="stepper-val" id="hrVal" value="12" inputmode="numeric" pattern="[0-9]*" min="0" max="23">
             <button class="stepper-btn" id="hrMinus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
           </div>
           <span class="stepper-colon">:</span>
           <div class="stepper-col">
             <button class="stepper-btn" id="minPlus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></button>
-            <div class="stepper-val" id="minVal">30</div>
+            <input type="number" class="stepper-val" id="minVal" value="30" inputmode="numeric" pattern="[0-9]*" min="0" max="59">
             <button class="stepper-btn" id="minMinus"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
           </div>
         </div>
